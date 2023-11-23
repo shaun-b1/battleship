@@ -16,29 +16,34 @@ describe("Initialising a new Gameboard", () => {
 
 describe("The placeShip function", () => {
   let gameboard;
-  let MockedShip;
 
   beforeEach(() => {
     gameboard = new Gameboard();
-    MockedShip = Ship;
-
-    MockedShip.mockImplementation(() => ({
-      length: 3,
-      hits: 0,
-      coords: [],
-      isSunk: false,
-    }));
   });
 
-  beforeAll(() => {
-    Ship.mockClear();
-  });
-
-  test("Should place a ship at a certain coordinate", () => {
-    gameboard.placeShip(3);
+  test("Should create a ship", () => {
+    gameboard.placeShip(4, 4, 3);
     expect(Ship).toHaveBeenCalledTimes(1);
     expect(gameboard.ships).toHaveLength(1);
-    expect(gameboard.ships[0]).toHaveProperty("length", 3);
+  });
+
+  test("Should create a ship whose cooordinates match its length", () => {
+    gameboard.placeShip(4, 4, 3);
+    expect(gameboard.ships).toHaveLength(1);
+    const mockShipInstance = Ship.mock.instances[0];
+    expect(mockShipInstance).toHaveProperty("coords", [
+      [4, 4],
+      [5, 4],
+      [6, 4],
+    ]);
+  });
+
+  test("Should not create a ship whose coordinates are outside of the gameboard", () => {
+    expect(() => {
+      gameboard.placeShip(8, 8, 3);
+    }).toThrow(Error);
+    expect(Ship).not.toHaveBeenCalled;
+    expect(gameboard.ships).toHaveLength(0);
   });
 });
 
