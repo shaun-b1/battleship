@@ -28,13 +28,26 @@ export default class Gameboard {
   }
 
   validateCoordinates(coordsArray) {
-    const isCoordinateOutsideBoard = (coord) => {
-      const [x, y] = coord;
-      return x < 0 || x >= Gameboard.numRows || y < 0 || y >= Gameboard.numCols;
-    };
+    const isCoordinateOutsideBoard = ([x, y]) =>
+      x < 0 || x >= Gameboard.numRows || y < 0 || y >= Gameboard.numCols;
 
     if (coordsArray.some(isCoordinateOutsideBoard)) {
       throw new Error("You can't place ships outside the gameboard!");
+    }
+
+    const areCoordsEqual = (coords1, coords2) => {
+      return coords1[0] === coords2[0] && coords1[1] === coords2[1];
+    };
+
+    const isCoordinateOccupied = (coord) =>
+      this.ships.some((ship) =>
+        ship.coords.some((coords) => areCoordsEqual(coords, coord)),
+      );
+
+    if (coordsArray.some(isCoordinateOccupied)) {
+      throw new Error(
+        "You can't place ships on a spot where a ship already is!",
+      );
     }
   }
 

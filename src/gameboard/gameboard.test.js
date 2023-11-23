@@ -45,6 +45,15 @@ describe("The placeShip function", () => {
     expect(Ship).not.toHaveBeenCalled;
     expect(gameboard.ships).toHaveLength(0);
   });
+
+  test("Should not create a ship whose coordinates overlap with another ship", () => {
+    gameboard.placeShip(4, 4, 3);
+    expect(gameboard.ships).toHaveLength(1);
+    expect(() => {
+      gameboard.placeShip(6, 4, 3);
+    }).toThrow(Error);
+    expect(gameboard.ships).toHaveLength(1);
+  });
 });
 
 describe("The receiveAttack function", () => {
