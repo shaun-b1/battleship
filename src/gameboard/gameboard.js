@@ -42,9 +42,9 @@ export default class Gameboard {
   }
 
   checkCoordOverlap(coordsArray) {
-    const isCoordinateOccupied = (coord) =>
+    const isCoordinateOccupied = (newShipCoord) =>
       this.ships.some((ship) =>
-        ship.coords.some((coords) => this.areCoordsEqual(coords, coord)),
+        ship.coords.some((coords) => this.areCoordsEqual(coords, newShipCoord)),
       );
 
     if (coordsArray.some(isCoordinateOccupied)) {
@@ -73,10 +73,25 @@ export default class Gameboard {
   }
 
   receiveAttack(x, y) {
+    const attackedCoords = [x, y];
+
     if (this.board[x][y] == "x") {
       throw new Error("You've already fired there!");
-    } else {
-      this.board[x][y] = "x";
     }
+
+    const isAttackOnShip = this.ships.some((ship) =>
+      ship.coords.some((coords) => this.areCoordsEqual(coords, attackedCoords)),
+    );
+
+    if (isAttackOnShip) {
+      const shipToHit = this.ships.find((ship) =>
+        ship.coords.some((coords) =>
+          this.areCoordsEqual(coords, attackedCoords),
+        ),
+      );
+      shipToHit.hit();
+    }
+
+    this.board[x][y] = "x";
   }
 }
