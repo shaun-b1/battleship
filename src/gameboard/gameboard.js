@@ -94,4 +94,8 @@ export default class Gameboard {
 
     this.board[x][y] = "x";
   }
+
+  allSunk() {
+    return this.ships.every((ship) => ship.isSunk == true);
+  }
 }

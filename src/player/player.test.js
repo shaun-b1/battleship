@@ -12,5 +12,5 @@ describe("The Player class", () => {
     });
   });
 
-  describe("The attackOpposition() function", () => {});
+  describe("The turn() function", () => {});
 });
