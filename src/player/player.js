@@ -1,3 +1,4 @@
+import { DuplicatedAttackError } from "../error/error";
 import Gameboard from "../gameboard/gameboard";
 
 export default class Player {
@@ -7,7 +8,13 @@ export default class Player {
 
   turn(opposition) {
     const [x, y] = this.generateRandomCoords();
-    opposition.board.receiveAttack(x, y);
+    try {
+      opposition.board.receiveAttack(x, y);
+    } catch (error) {
+      if (error instanceof DuplicatedAttackError) {
+        return;
+      }
+    }
   }
 
   generateRandomCoords() {

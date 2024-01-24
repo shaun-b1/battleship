@@ -1,4 +1,9 @@
 /* eslint-disable no-undef */
+import {
+  DuplicatedAttackError,
+  DuplicatedShipPlacementError,
+  OutsideBoardError,
+} from "../error/error";
 import Ship from "../ship/ship";
 import Gameboard from "./gameboard";
 jest.mock("../ship/ship");
@@ -42,7 +47,7 @@ describe("The Gameboard class", () => {
     test("Should not create a ship whose coordinates are outside of the gameboard", () => {
       expect(() => {
         gameboard.placeShip(8, 8, 3);
-      }).toThrow(Error);
+      }).toThrow(OutsideBoardError);
       expect(Ship).not.toHaveBeenCalled;
       expect(gameboard.ships).toHaveLength(0);
     });
@@ -52,7 +57,7 @@ describe("The Gameboard class", () => {
       expect(gameboard.ships).toHaveLength(1);
       expect(() => {
         gameboard.placeShip(6, 4, 3);
-      }).toThrow(Error);
+      }).toThrow(DuplicatedShipPlacementError);
       expect(gameboard.ships).toHaveLength(1);
     });
   });
@@ -73,7 +78,7 @@ describe("The Gameboard class", () => {
       gameboard.receiveAttack(4, 4);
       expect(() => {
         gameboard.receiveAttack(4, 4);
-      }).toThrow(Error);
+      }).toThrow(DuplicatedAttackError);
     });
 
     test("Should fire on a ship, increasing it's hits by 1", () => {

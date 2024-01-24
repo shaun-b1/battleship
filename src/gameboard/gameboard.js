@@ -1,3 +1,8 @@
+import {
+  DuplicatedAttackError,
+  DuplicatedShipPlacementError,
+  OutsideBoardError,
+} from "../error/error";
 import Ship from "../ship/ship";
 
 export default class Gameboard {
@@ -37,7 +42,9 @@ export default class Gameboard {
       x < 0 || x >= Gameboard.numRows || y < 0 || y >= Gameboard.numCols;
 
     if (coordsArray.some(isCoordinateOutsideBoard)) {
-      throw new Error("You can't place ships outside the gameboard!");
+      throw new OutsideBoardError(
+        "You can't place ships outside the gameboard!",
+      );
     }
   }
 
@@ -48,7 +55,7 @@ export default class Gameboard {
       );
 
     if (coordsArray.some(isCoordinateOccupied)) {
-      throw new Error(
+      throw new DuplicatedShipPlacementError(
         "You can't place ships on a spot where a ship already is!",
       );
     }
@@ -76,7 +83,7 @@ export default class Gameboard {
     const attackedCoords = [x, y];
 
     if (this.board[x][y] == "x") {
-      throw new Error("You've already fired there!");
+      throw new DuplicatedAttackError("You've already fired there!");
     }
 
     const isAttackOnShip = this.ships.some((ship) =>

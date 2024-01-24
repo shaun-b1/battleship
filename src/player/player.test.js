@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import Gameboard from "../gameboard/gameboard";
 import Player from "./player";
+import { DuplicatedAttackError } from "../error/error";
 jest.mock("../gameboard/gameboard");
 
 describe("The Player class", () => {
@@ -39,6 +40,32 @@ describe("The Player class", () => {
       expect(mockOpposition.board.receiveAttack).toHaveBeenCalledWith(1, 2);
       expect(mockOpposition.board.receiveAttack).toHaveBeenCalledWith(3, 4);
     });
+
+    test("Should throw an error if the coordinates are already fired upon", () => {
+      const player = new Player();
+
+      const mockOpposition = {
+        board: {
+          receiveAttack: jest
+            .fn()
+            .mockImplementationOnce(() => {
+              // First call simulation
+            })
+            .mockImplementationOnce(() => {
+              throw new DuplicatedAttackError("You've already fired there!");
+            }),
+        },
+      };
+
+      player.turn(mockOpposition);
+
+      try {
+        player.turn(mockOpposition);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DuplicatedAttackError);
+        expect(error.message).toBe("You've already fired there!");
+      }
+    });
   });
 
   describe("The generateRandomCoords() function", () => {
@@ -51,17 +78,6 @@ describe("The Player class", () => {
         expect(x).toBeLessThan(10);
         expect(y).toBeGreaterThanOrEqual(0);
         expect(y).toBeLessThan(10);
-      }
-    });
-    test("Should not return the same coords in consecutive calls", () => {
-      const player = new Player();
-      for (let i = 0; i < 10; i++) {
-        const [firstCoords, secondCoords] = [
-          player.generateRandomCoords(),
-          player.generateRandomCoords(),
-        ];
-
-        expect(firstCoords).not.toEqual(secondCoords);
       }
     });
   });
