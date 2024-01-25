@@ -72,11 +72,13 @@ describe("The Gameboard class", () => {
 
     test("Should take co-ordinates", () => {
       gameboard.receiveAttack(4, 4);
+
       expect(gameboard.board[4][4]).toBe("x");
     });
 
     test("Should return an error if the coordinates are already fired upon", () => {
       gameboard.receiveAttack(4, 4);
+
       expect(() => {
         gameboard.receiveAttack(4, 4);
       }).toThrow(DuplicatedAttackError);
@@ -84,10 +86,12 @@ describe("The Gameboard class", () => {
 
     test("Should fire on a ship, increasing it's hits by 1", () => {
       gameboard.placeShip(4, 4, 3);
-      expect(gameboard.ships).toHaveLength(1);
       const mockShipInstance = Ship.mock.instances[0];
       mockShipInstance.hit = jest.fn();
+
       gameboard.receiveAttack(4, 4);
+
+      expect(gameboard.ships).toHaveLength(1);
       expect(mockShipInstance.hit).toHaveBeenCalledTimes(1);
     });
 
@@ -98,7 +102,9 @@ describe("The Gameboard class", () => {
       const secondMockShipInstance = Ship.mock.instances[1];
       mockShipInstance.hit = jest.fn();
       secondMockShipInstance.hit = jest.fn();
+
       gameboard.receiveAttack(7, 6);
+
       expect(mockShipInstance.hit).not.toHaveBeenCalled();
       expect(secondMockShipInstance.hit).toHaveBeenCalledTimes(1);
     });
@@ -107,8 +113,10 @@ describe("The Gameboard class", () => {
       gameboard.placeShip(4, 4, 3);
       const mockShipInstance = Ship.mock.instances[0];
       mockShipInstance.hit = jest.fn();
+
       gameboard.receiveAttack(5, 4);
       gameboard.receiveAttack(6, 4);
+
       expect(mockShipInstance.hit).toHaveBeenCalledTimes(2);
     });
 
