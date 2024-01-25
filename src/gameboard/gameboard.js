@@ -100,6 +100,7 @@ export default class Gameboard {
     }
 
     this.board[x][y] = "x";
+    return isAttackOnShip;
   }
 
   allSunk() {

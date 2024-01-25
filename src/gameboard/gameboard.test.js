@@ -12,6 +12,7 @@ describe("The Gameboard class", () => {
   describe("Initialising a new Gameboard", () => {
     test("Should create a Gameboard object", () => {
       const gameboard = new Gameboard();
+
       expect(gameboard).toBeInstanceOf(Gameboard);
       expect(gameboard.board).toHaveLength(Gameboard.numRows);
       expect(
