@@ -31,8 +31,8 @@ export default class ComputerPlayer extends Player {
     }
   }
 
-  // generateTargetCoords() {
-  //     create a list of possible coordinates around the hit coordinate
-  //     return those that are valid with isValidCoords()
-  // }
+  generateTargetCoords() {
+    //     create a list of possible coordinates around the hit coordinate
+    //     return those that are valid with isValidCoords()
+  }
 }
